@@ -5,6 +5,10 @@ security:
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         users_in_memory: { memory: null }
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -21,9 +25,10 @@ security:
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
-    access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+    # access_control:
+    #     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    #     - { path: ^/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    #     - { path: ^/, roles: ROLE_USER }
 
 when@test:
     security:
@@ -37,3 +42,32 @@ when@test:
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
+# security:
+#     encoders:
+#         App\Entity\User: bcrypt
+
+#     providers:
+#         doctrine:
+#             entity:
+#                 class: App:User
+#                 property: username
+
+#     firewalls:
+#         dev:
+#             pattern: ^/(_(profiler|wdt)|css|images|js)/
+#             security: false
+
+#         main:
+#             anonymous: ~
+#             pattern: ^/
+#             form_login:
+#                 login_path: login
+#                 check_path: login_check
+#                 always_use_default_target_path:  true
+#                 default_target_path:  /
+#             logout: ~
+
+#     access_control:
+#         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#         - { path: ^/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#         - { path: ^/, roles: ROLE_USER }
