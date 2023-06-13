@@ -10,6 +10,7 @@ body {
 
 .slide-image {
     width: 100%;
+    margin-bottom: 2rem;
 }
 
 .carousel-holder {
@@ -49,6 +50,13 @@ body {
     color: #333;
 }
 
-footer {
-    margin: 50px 0;
+.fixed-bottom {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #f8f9fa;
+    color: #6c757d;
+    padding: 10px;
+    text-align: center;
 }
