@@ -15,7 +15,16 @@ security:
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            provider: app_user_provider
+            form_login:
+            #  chemin (route) vers la page de connexion
+                login_path: app_login
+                #  route utilisée pour la vérification du formulaire de connexion
+                check_path: app_login
+            logout:
+                 path: app_logout
+                #  route vers laquelle l'utilisateur sera redirigé après s'être déconnecté avec succès
+                 target: app_login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -29,6 +38,12 @@ security:
     #     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     #     - { path: ^/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     #     - { path: ^/, roles: ROLE_USER }
+    access_control:
+        - { path: '^/login', roles: PUBLIC_ACCESS }
+        - { path: '^/users', roles: PUBLIC_ACCESS }
+        - { path: '^/', roles: ROLE_USER }
+
+        # les utilisateurs ayant le rôle ROLE_ADMIN pourront accéder à toutes les pages réservées aux utilisateurs avec le rôle ROLE_USER, car ils ont un rôle de niveau supérieur. 
 
 when@test:
     security:
@@ -42,32 +57,4 @@ when@test:
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
-# security:
-#     encoders:
-#         App\Entity\User: bcrypt
 
-#     providers:
-#         doctrine:
-#             entity:
-#                 class: App:User
-#                 property: username
-
-#     firewalls:
-#         dev:
-#             pattern: ^/(_(profiler|wdt)|css|images|js)/
-#             security: false
-
-#         main:
-#             anonymous: ~
-#             pattern: ^/
-#             form_login:
-#                 login_path: login
-#                 check_path: login_check
-#                 always_use_default_target_path:  true
-#                 default_target_path:  /
-#             logout: ~
-
-#     access_control:
-#         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-#         - { path: ^/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-#         - { path: ^/, roles: ROLE_USER }
