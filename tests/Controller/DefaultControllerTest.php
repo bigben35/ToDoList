@@ -14,10 +14,15 @@ class DefaultControllerTest extends WebTestCase
         //requête client
         $crawler = $client->request('GET', '/');
 
-        //vérifie que la réponse HTTP a un code de statut 200, ce qui signifie que la requête a réussi et que la page a été trouvée.
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        // Si l'on est pas connecté, on est censé être redirigé vers la page de login
+        // Vérifier que la réponse a un code de statut de 302, indiquant une redirection
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "En attente d'un statut HTTP 302, et non " . $client->getResponse()->getStatusCode());
 
-        //vérifie que le nombre d'éléments <h1> dans la page est égal à 1. Cela garantit que le titre principal est présent sur la page.
-        $this->assertCount(1, $crawler->filter('h1'));
+        // Suivre la redirection et vérifier que l'on est bien sur la page de login
+        $crawler = $client->followRedirect();
+
+        // Vérifier la présence d'un bouton "Se connecter"
+        $buttonCrawler = $crawler->selectButton('Se connecter');
+        $this->assertGreaterThan(0, $buttonCrawler->count(), "Aucun bouton 'Se connecter' trouvé");
     }
 }
