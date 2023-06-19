@@ -3,9 +3,9 @@
 namespace App\Tests\Entity;
 
 use App\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use PHPUnit\Framework\TestCase;
 
-class UserTest extends WebTestCase
+class UserTest extends TestCase
 {
     public function testCreateUserIsTrue()
     {
