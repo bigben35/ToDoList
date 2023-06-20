@@ -17,7 +17,19 @@ class TaskController extends AbstractController
     #[Route('/tasks', name: 'task_list')]
     public function listAction(TaskRepository $taskRepository): Response
     {
-        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findAll()]);
+        $user = $this->getUser(); // Récupérer l'utilisateur connecté
+        $isAdmin = in_array('ROLE_ADMIN', $user->getRoles()); // Vérifier si l'utilisateur a le rôle ROLE_ADMIN
+    
+        // Récupérer les tâches liées à l'utilisateur connecté
+        $tasks = $taskRepository->findBy(['user' => $user]);
+    
+        // Si l'utilisateur est un administrateur, ajouter les tâches anonymes
+        if ($isAdmin) {
+            $anonymousTasks = $taskRepository->findBy(['user' => null]);
+            $tasks = array_merge($tasks, $anonymousTasks);
+        }
+    
+        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
     }
 
 
