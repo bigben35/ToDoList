@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -32,13 +33,13 @@ class SecurityControllerTest extends WebTestCase
         $form['_password'] = 'password';
         $this->client->submit($form);
 
-    //     // Vérifier la redirection vers la page d'accueil
-    // $this->assertTrue($this->client->getResponse()->isRedirect('/'));
+        // Vérifier la redirection vers http valide
+        $this->assertResponseRedirects();
 
-    // Suivre la redirection et vérifier la page d'accueil
-    $crawler = $this->client->followRedirect();
-    $this->assertCount(1, $crawler->filter('h1'));
-   
+        // Suivre la redirection et vérifier la page d'accueil
+        $crawler = $this->client->followRedirect();
+        $this->assertRouteSame('homepage');
+        $this->assertCount(1, $crawler->filter('h1'));
 
     }
 
@@ -69,6 +70,30 @@ class SecurityControllerTest extends WebTestCase
 
     }
 
+
+    public function testLogin(): void
+    {
+        // Récupérez le UserRepository depuis le conteneur de services
+        $userRepository = static::getContainer()->get(UserRepository::class);
+
+        // Nom d'utilisateur à utiliser pour la connexion
+        $username = 'user1';
+
+        // Trouvez l'utilisateur correspondant au nom d'utilisateur fourni
+        $user = $userRepository->findOneByUsername($username);
+
+        // Connectez-vous en tant qu'utilisateur
+        $this->client->loginUser($user);
+
+        
+        // Effectuez une requête GET (par exemple, accédez à la page d'accueil)
+        $this->client->request('GET', '/');
+
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains('h1', 'Bienvenue user1');
+    }
+
+
     public function testLogOut(): void
     {
         // Connectez-vous en tant qu'utilisateur
@@ -81,10 +106,12 @@ class SecurityControllerTest extends WebTestCase
         $this->assertTrue($this->client->getResponse()->isRedirection());
 
         // Suivez la redirection vers la page de connexion
-        $crawler = $this->client->followRedirect();
+        $this->client->followRedirect();
 
         // Vérifiez que la page de connexion est affichée
         $this->assertRouteSame('app_login');
         $this->assertSelectorExists('form[action="/login"]');
     }
+
+
 }
