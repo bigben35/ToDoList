@@ -132,6 +132,7 @@ class TaskControllerTest extends WebTestCase
 
         // Récupérer la tâche enregistrée depuis la base de données
         $persistedTask = $this->taskRepository->find($task->getId());
+        dd($persistedTask);
 
         // Vérifier si la tâche récupérée correspond à la tâche que vous avez créée
         $this->assertEquals($task->getTitle(), $persistedTask->getTitle());
