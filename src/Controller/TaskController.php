@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,6 +41,11 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Obtenez l'utilisateur connecté
+            $user = $this->getUser();
+
+            // Liez l'utilisateur à la tâche
+            $task->setUser($user);
             $em->persist($task);
             $em->flush();
 
@@ -54,14 +58,17 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/edit', name: 'task_edit')]
-    public function editAction(Task $task, Request $request, TaskRepository $taskRepository)
+    public function editAction(Task $task, Request $request, TaskRepository $taskRepository, EntityManagerInterface $em)
     {
+        var_dump($task->getTitle());
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $taskRepository->save($task, true);
+            // $em->persist($task);
+            // $em->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
