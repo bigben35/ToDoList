@@ -60,7 +60,8 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/edit', name: 'task_edit')]
     public function editAction(Task $task, Request $request, TaskRepository $taskRepository, EntityManagerInterface $em)
     {
-        var_dump($task->getTitle());
+        // dd($task);
+        // var_dump($task->getTitle());
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);

@@ -4,7 +4,7 @@
     <div class="row">
     {{ dump(task.title) }}
     <h1>Modifier la tâche: {{ task.title }}</h1>
-        {{ form_start(form, {'action' : path('task_edit', { 'id' : attribute(task, 'id')|default(0) })}) }}
+        {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
             <div class="form-group">
             {{ form_label(form.title) }}
             {{ form_widget(form.title, {'attr': {'value': task.title}}) }}
