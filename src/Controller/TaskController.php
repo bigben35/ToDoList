@@ -46,6 +46,7 @@ class TaskController extends AbstractController
 
             // Liez l'utilisateur à la tâche
             $task->setUser($user);
+
             $em->persist($task);
             $em->flush();
 
