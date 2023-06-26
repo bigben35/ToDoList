@@ -2,10 +2,19 @@
 
 {% block body %}
     <div class="row">
+    <h1>Modifier la tâche: {{ task.title }}</h1>
         {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
-            {{ form_widget(form) }}
+            <div class="form-group">
+            {{ form_label(form.title) }}
+            {{ form_widget(form.title, {'attr': {'value': task.title}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.content) }}
+            {{ form_widget(form.content, {'attr': {'value': task.content}}) }}
+        </div>
 
             <button type="submit" class="btn btn-success pull-right">Modifier</button>
         {{ form_end(form) }}
+        <a href="{{ path('task_list') }}" class="btn btn-primary">Retour à la liste des tâches</a>
     </div>
 {% endblock %}

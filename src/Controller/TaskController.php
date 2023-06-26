@@ -43,7 +43,7 @@ class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Obtenez l'utilisateur connecté
             $user = $this->getUser();
-        
+
             // Liez l'utilisateur à la tâche
             $task->setUser($user);
 
@@ -59,14 +59,18 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/edit', name: 'task_edit')]
-    public function editAction(Task $task, Request $request, TaskRepository $taskRepository)
+    public function editAction(Task $task, Request $request, TaskRepository $taskRepository, EntityManagerInterface $em)
     {
+        // dd($task);
+        // var_dump($task->getTitle());
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $taskRepository->save($task, true);
+            // $em->persist($task);
+            // $em->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
