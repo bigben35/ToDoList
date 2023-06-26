@@ -9,7 +9,7 @@
         <div class="col-sm-4 col-lg-4 col-md-4">
                 <div class="card" style="width: 18rem;">
                     <div class="card-header">
-                        <h4><a href="{{ path('task_edit', {'id' : task.id }) }}" class="text-decoration-none text-capitalize">{{ task.title }}{{ task.id}}</a>
+                        <h4><a href="{{ path('task_edit', {'id' : task.id }) }}" class="text-decoration-none text-capitalize">{{ task.title }}</a>
                         {% if task.isDone %}
                             <i class="fa-solid fa-check"></i>
                         {% else %}
