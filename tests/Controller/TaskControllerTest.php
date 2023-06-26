@@ -51,26 +51,6 @@ class TaskControllerTest extends WebTestCase
 
     public function testListWhenAuthenticateAsUser(): void
     {
-        // // Créer une instance de SecurityControllerTest
-        // $securityTest = new SecurityControllerTest();
-        
-        // // Appeler la méthode setUp() de SecurityControllerTest pour initialiser $client
-        // $securityTest->setUp();
-        
-        // // Appeler la méthode testLoginUser() de SecurityControllerTest
-        // // Connectez-vous en tant qu'utilisateur
-        // $securityTest->testLoginUser();
-
-        // $this->client->request('GET', '/tasks');
-
-        // // Vérifier que la réponse renvoie un code de statut HTTP 200
-        // $this->assertSame(200, $this->client->getResponse()->getStatusCode());
-
-        // // Vérifier que la route actuelle correspond à la route des tâches
-        // $this->assertRouteSame('task_list');
-        
-        // // $this->assertResponseIsSuccessful();
-
         // Accéder à la page de connexion
         $crawler = $this->client->request('GET', '/login');
 
@@ -88,24 +68,7 @@ class TaskControllerTest extends WebTestCase
 
         // Vérifier que la route actuelle correspond à la route de la liste des tâches
         $this->assertSame('task_list', $this->client->getRequest()->attributes->get('_route'));
-         // Créer une instance de SecurityControllerTest
-    // $securityTest = new SecurityControllerTest();
     
-    // // Appeler la méthode setUp() de SecurityControllerTest pour initialiser $client
-    // $securityTest->setUp();
-    
-    // // Appeler la méthode testLogin() de SecurityControllerTest
-    // // Connectez-vous en tant qu'utilisateur
-    // $securityTest->testLogin();
-
-    // // Effectuer une requête GET vers la route de la liste des tâches
-    // $this->client->request('GET', '/tasks');
-
-    // // Vérifier que la réponse renvoie un code de statut HTTP 200
-    // $this->assertSame(200, $this->client->getResponse()->getStatusCode());
-
-    // // Vérifier que la route actuelle correspond à la route de la liste des tâches
-    // $this->assertSame('task_list', $this->client->getRequest()->attributes->get('_route'));
      }
 
      
@@ -122,7 +85,6 @@ class TaskControllerTest extends WebTestCase
         $task = new Task();
         $task->setTitle('Nouvelle tâche');
         $task->setContent('Description de la tâche');
-        // ... autres attributs de la tâche
 
         // Associer la tâche à l'utilisateur
         $task->setUser($user);
