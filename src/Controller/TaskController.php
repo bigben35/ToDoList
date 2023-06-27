@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TaskController extends AbstractController
@@ -101,14 +102,12 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('task_list');
     }
 
-    /**
-     * @Route("/tasks/{id}/delete", name="task_delete")
-     */
-    public function deleteTaskAction(Task $task)
+
+    #[Route("/tasks/{id}/delete", name:"task_delete")]
+    #[IsGranted('ROLE_USER', message: 'Vous devez être connecté avec un compte utilisateur')]
+    public function deleteTaskAction(Task $task, TaskRepository $taskRepository): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($task);
-        $em->flush();
+        $taskRepository->remove($task, true);
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
