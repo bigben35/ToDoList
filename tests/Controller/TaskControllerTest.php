@@ -5,9 +5,11 @@ namespace App\Tests\Controller;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Repository\TaskRepository;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use App\Tests\Controller\SecurityControllerTest;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TaskControllerTest extends WebTestCase
@@ -94,7 +96,7 @@ class TaskControllerTest extends WebTestCase
 
         // Récupérer la tâche enregistrée depuis la base de données
         $persistedTask = $this->taskRepository->find($task->getId());
-        dd($persistedTask);
+        // dd($persistedTask);
 
         // Vérifier si la tâche récupérée correspond à la tâche que vous avez créée
         $this->assertEquals($task->getTitle(), $persistedTask->getTitle());
@@ -102,5 +104,105 @@ class TaskControllerTest extends WebTestCase
 
         // Vérifier si la tâche a été enregistrée avec succès
         $this->assertNotNull($task->getId());
+    }
+
+
+
+    public function testEditTaskByAnUser(): void
+    {
+        // indique au client de suivre les redirections automatiquement, ce qui est utile lorsque vous effectuez une action qui déclenche une redirection (edit).
+        $this->client->followRedirects();
+
+        // récupère le UserRepository à partir du conteneur de dépendances de Symfony.
+        $userRepository = static::getContainer()->get(UserRepository::class);
+
+        // récupère le TaskRepository à partir du conteneur de dépendances de Symfony.
+        $taskRepository = static::getContainer()->get(TaskRepository::class);
+
+        // récupère l'utilisateur de test en utilisant le UserRepository et en le cherchant par son nom d'utilisateur.
+        $testUser = $userRepository->findOneBy(['username' => 'user5']);
+
+        // simule la connexion de l'utilisateur de test en utilisant le client Symfony.
+        $this->client->loginUser($testUser);
+
+        // envoie une requête GET pour accéder à la page d'édition de la tâche spécifique, en utilisant l'identifiant de la tâche
+        $crawler = $this->client->request('GET', '/tasks/10/edit');
+
+        // vérifie que la réponse de la requête est réussie
+        $this->assertResponseIsSuccessful();
+
+        // sélectionne le formulaire d'édition de la tâche à partir du crawler (qui représente la page HTML récupérée) en utilisant le bouton "Modifier", avec titre et contenu modifiés
+        $form = $crawler->selectButton('Modifier')->form([
+            'task[title]' => 'Tâche user5 edit',
+            'task[content]' => 'Contenu de la tâche user5 edit',
+        ]);
+        $this->client->submit($form);
+
+        // vérifie que la réponse de la requête a un code de statut HTTP 200 (OK).
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        // vérifie que dans la réponse HTML, il y a un élément <div> contenant le texte "La tâche a bien été modifiée.
+        $this->assertSelectorExists('div', 'La tâche a bien été modifiée.');
+
+        $ModifiedTask = $taskRepository->findOneBy(['id' => '10']);
+
+        // vérifie que le titre de la tâche modifiée contient la chaîne... 
+        $this->assertStringContainsString('Tâche user5 edit', $ModifiedTask->getTitle());
+
+        // vérifie que le contenu de la tâche modifiée contient la chaîne... 
+        $this->assertStringContainsString('Contenu de la tâche user5 edit', $ModifiedTask->getContent());
+    }
+
+
+    public function testAdminDeleteHisTask(): void
+    {
+        // Cette ligne indique au client de suivre les redirections automatiquement, ce qui est utile lorsque vous effectuez une action qui déclenche une redirection comme la suppression.
+        $this->client->followRedirects();
+
+        // récupère le UserRepository à partir du conteneur de dépendances de Symfony.
+        $userRepository = static::getContainer()->get(UserRepository::class);
+
+        // récupère l'admin
+        $testUserAdmin = $userRepository->findOneBy(['username' => 'admin']);
+
+        $task = $testUserAdmin->getTasks()->first();
+
+        // simulate $testUser being logged in
+        $this->client->loginUser($testUserAdmin);
+
+        // envoie une requête GET pour accéder à la page de suppression de la tâche spécifique, en utilisant l'identifiant de la tâche.
+        $this->client->request('GET', '/tasks/'.$task->getId().'/delete');
+
+        // réponse de la requête est réussie, c'est-à-dire qu'elle a un code de statut HTTP 2xx.
+        $this->assertResponseIsSuccessful();
+
+        // réponse HTML, il y a un élément <div> avec la classe alert-success contenant le texte "La tâche a bien été supprimée.". Cela permet de vérifier visuellement que la suppression de la tâche a été confirmée.
+        $this->assertSelectorTextContains('html div.alert-success', "La tâche a bien été supprimée.");
+    }
+
+    public function testUserDeleteHisTask(): void
+    {
+        // Cette ligne indique au client de suivre les redirections automatiquement, ce qui est utile lorsque vous effectuez une action qui déclenche une redirection comme la suppression.
+        $this->client->followRedirects();
+
+        // récupère le UserRepository à partir du conteneur de dépendances de Symfony.
+        $userRepository = static::getContainer()->get(UserRepository::class);
+
+        // récupère l'admin
+        $testUser = $userRepository->findOneBy(['username' => 'user5']);
+
+        $task = $testUser->getTasks()->first();
+
+        // simulate $testUser being logged in
+        $this->client->loginUser($testUser);
+
+        // envoie une requête GET pour accéder à la page de suppression de la tâche spécifique, en utilisant l'identifiant de la tâche.
+        $this->client->request('GET', '/tasks/'.$task->getId().'/delete');
+
+        // réponse de la requête est réussie, c'est-à-dire qu'elle a un code de statut HTTP 2xx.
+        $this->assertResponseIsSuccessful();
+        
+        // réponse HTML, il y a un élément <div> avec la classe alert-success contenant le texte "La tâche a bien été supprimée.". Cela permet de vérifier visuellement que la suppression de la tâche a été confirmée.
+        $this->assertSelectorTextContains('html div.alert-success', "La tâche a bien été supprimée.");
     }
  }
