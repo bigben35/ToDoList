@@ -21,6 +21,8 @@ security:
                 login_path: app_login
                 #  route utilisée pour la vérification du formulaire de connexion
                 check_path: app_login
+                # page d'accueil comme cible par défaut après la connexion
+                default_target_path: homepage
             logout:
                  path: app_logout
                 # #  route vers laquelle l'utilisateur sera redirigé après s'être déconnecté avec succès
@@ -28,7 +30,7 @@ security:
 
     access_control:
         - { path: '^/login', roles: PUBLIC_ACCESS }
-        - { path: '^/users', roles: PUBLIC_ACCESS }
+        # - { path: '^/users', roles: PUBLIC_ACCESS }
         - { path: '^/', roles: ROLE_USER }
 
         # les utilisateurs ayant le rôle ROLE_ADMIN pourront accéder à toutes les pages réservées aux utilisateurs avec le rôle ROLE_USER, car ils ont un rôle de niveau supérieur. 
