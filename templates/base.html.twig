@@ -30,10 +30,10 @@
                     <div class="text-right">
                         <p class="my-auto">
                             {% if app.user %}
-                            <a href="{{ path('app_logout') }}" class="btn btn-danger">Se déconnecter</a>
+                                <a href="{{ path('app_logout') }}" class="btn btn-danger">Se déconnecter</a>
                             {% endif %}
                             {% if not app.user and 'app_login' != app.request.attributes.get('_route') %}
-                            <a href="{{ path('app_login') }}" class="btn btn-success">Se connecter</a>
+                                <a href="{{ path('app_login') }}" class="btn btn-success">Se connecter</a>
                             {% endif %}
                         </p>
                     </div>
