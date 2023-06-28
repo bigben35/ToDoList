@@ -154,6 +154,41 @@ class TaskControllerTest extends WebTestCase
     }
 
 
+    public function testToggleTaskWithSuccess(): void
+    {
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        
+        $user = $userRepository->findOneBy(['username' => 'user1']);
+        
+        $this->client->loginUser($user);
+        $this->client->followRedirects();
+        $crawler = $this->client->request('GET', '/tasks/33/toggle');
+        $this->assertResponseIsSuccessful();
+        $this->assertRouteSame('task_list');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertSelectorExists('div.alert.alert-success');
+    }
+
+    public function testToggleTaskWithNotAGoodUser(): void
+    {
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        
+        $admin = $userRepository->findOneBy(['username' => 'admin']);
+        $user = $userRepository->findOneBy(['username' => 'user1']);
+
+        $task = $admin->getTasks()->first();
+        
+        $this->client->loginUser($user);
+        $this->client->followRedirects();
+        $crawler = $this->client->request('GET', '/tasks/'.$task->getId().'/toggle');
+        // $this->assertResponseStatus(403);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertRouteSame('task_list');
+        $this->assertSelectorExists('div.alert.alert-danger');
+    }
+
+
     public function testAdminDeleteHisTask(): void
     {
         // Cette ligne indique au client de suivre les redirections automatiquement, ce qui est utile lorsque vous effectuez une action qui déclenche une redirection comme la suppression.
