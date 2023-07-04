@@ -19,29 +19,6 @@ class AppFixturesTest extends WebTestCase
         }
     }
 
-    // public function testFixturesLoadSuccessfully()
-    // {
-    //     $client = self::$client;
-    //     $container = $client->getContainer();
-    //     $entityManager = $container->get('doctrine.orm.entity_manager');
-    //     $userRepository = $entityManager->getRepository(User::class);
-    //     $taskRepository = $entityManager->getRepository(Task::class);
-
-    //     // Vérification des utilisateurs
-    //     $users = $userRepository->findAll();
-    //     $this->assertCount(21, $users); // 1 admin + 5 users
-
-    //     // Vérification des tâches de l'administrateur
-    //     $adminUser = $userRepository->findOneBy(['username' => 'admin']);
-    //     $adminTasks = $taskRepository->findBy(['user' => $adminUser]);
-    //     $this->assertCount(10, $adminTasks);
-
-    //     // Vérification des tâches des utilisateurs
-    //     $user = $userRepository->findOneBy(['username' => 'user1']);
-    //     $userTasks = $taskRepository->findBy(['user' => $user]);
-    //     $this->assertCount(13, $userTasks);
-    // }
-
 
     public function testFixturesLoadSuccessfully()
 {
