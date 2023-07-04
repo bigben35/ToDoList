@@ -16,10 +16,6 @@ class TaskControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
 
-    // public function setUp(): void
-    // {
-    //     $this->client = static::createClient();
-    // }
     private TaskRepository $taskRepository;
     private EntityManagerInterface $entityManager;
 
@@ -58,7 +54,7 @@ class TaskControllerTest extends WebTestCase
 
         // Remplir le formulaire de connexion avec les informations d'identification valides
         $form = $crawler->selectButton('Se connecter')->form();
-        $form['_username'] = 'user1';
+        $form['_username'] = 'user5';
         $form['_password'] = 'password';
         $this->client->submit($form);
 
@@ -120,21 +116,21 @@ class TaskControllerTest extends WebTestCase
         $taskRepository = static::getContainer()->get(TaskRepository::class);
 
         // récupère l'utilisateur de test en utilisant le UserRepository et en le cherchant par son nom d'utilisateur.
-        $testUser = $userRepository->findOneBy(['username' => 'user1']);
+        $testUser = $userRepository->findOneBy(['username' => 'user5']);
 
         // simule la connexion de l'utilisateur de test en utilisant le client Symfony.
         $this->client->loginUser($testUser);
 
         // envoie une requête GET pour accéder à la page d'édition de la tâche spécifique, en utilisant l'identifiant de la tâche
-        $crawler = $this->client->request('GET', '/tasks/30/edit');
+        $crawler = $this->client->request('GET', '/tasks/110/edit');
 
         // vérifie que la réponse de la requête est réussie
         $this->assertResponseIsSuccessful();
 
         // sélectionne le formulaire d'édition de la tâche à partir du crawler (qui représente la page HTML récupérée) en utilisant le bouton "Modifier", avec titre et contenu modifiés
         $form = $crawler->selectButton('Modifier')->form([
-            'task[title]' => 'Tâche user1 edit',
-            'task[content]' => 'Contenu de la tâche user1 edit',
+            'task[title]' => 'Tâche user5 edit',
+            'task[content]' => 'Contenu de la tâche user5 edit',
         ]);
         $this->client->submit($form);
 
@@ -144,13 +140,13 @@ class TaskControllerTest extends WebTestCase
         // vérifie que dans la réponse HTML, il y a un élément <div> contenant le texte "La tâche a bien été modifiée.
         $this->assertSelectorExists('div', 'La tâche a bien été modifiée.');
 
-        $ModifiedTask = $taskRepository->findOneBy(['id' => '30']);
+        $ModifiedTask = $taskRepository->findOneBy(['id' => '110']);
 
         // vérifie que le titre de la tâche modifiée contient la chaîne... 
-        $this->assertStringContainsString('Tâche user1 edit', $ModifiedTask->getTitle());
+        $this->assertStringContainsString('Tâche user5 edit', $ModifiedTask->getTitle());
 
         // vérifie que le contenu de la tâche modifiée contient la chaîne... 
-        $this->assertStringContainsString('Contenu de la tâche user1 edit', $ModifiedTask->getContent());
+        $this->assertStringContainsString('Contenu de la tâche user5 edit', $ModifiedTask->getContent());
     }
 
 
@@ -158,11 +154,11 @@ class TaskControllerTest extends WebTestCase
     {
         $userRepository = static::getContainer()->get(UserRepository::class);
         
-        $user = $userRepository->findOneBy(['username' => 'user1']);
+        $user = $userRepository->findOneBy(['username' => 'user5']);
         
         $this->client->loginUser($user);
         $this->client->followRedirects();
-        $crawler = $this->client->request('GET', '/tasks/33/toggle');
+        $crawler = $this->client->request('GET', '/tasks/110/toggle');
         $this->assertResponseIsSuccessful();
         $this->assertRouteSame('task_list');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -174,7 +170,7 @@ class TaskControllerTest extends WebTestCase
         $userRepository = static::getContainer()->get(UserRepository::class);
         
         $admin = $userRepository->findOneBy(['username' => 'admin']);
-        $user = $userRepository->findOneBy(['username' => 'user1']);
+        $user = $userRepository->findOneBy(['username' => 'user5']);
 
         $task = $admin->getTasks()->first();
         
@@ -223,7 +219,7 @@ class TaskControllerTest extends WebTestCase
         $userRepository = static::getContainer()->get(UserRepository::class);
 
         // récupère l'user
-        $testUser = $userRepository->findOneBy(['username' => 'user1']);
+        $testUser = $userRepository->findOneBy(['username' => 'user5']);
 
         $task = $testUser->getTasks()->first();
 
