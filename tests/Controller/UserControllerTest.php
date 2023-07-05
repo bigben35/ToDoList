@@ -68,8 +68,8 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     
         $form = $crawler->selectButton('Ajouter')->form();
-        $form['user[username]'] = 'newuser';
-        $form['user[email]'] = 'newuser@example.com';
+        $form['user[username]'] = 'newuser3';
+        $form['user[email]'] = 'newuser3@example.com';
         $form['user[password][first]'] = 'password';
         $form['user[password][second]'] = 'password';
         $form['user[roles]']->select('ROLE_USER');
@@ -82,10 +82,10 @@ class UserControllerTest extends WebTestCase
         $this->assertSelectorTextContains('div.alert.alert-success', 'L\'utilisateur a bien été ajouté.');
     
         // Vérification des données de l'utilisateur créé
-        $createdUser = $userRepository->findOneBy(['username' => 'newuser']);
+        $createdUser = $userRepository->findOneBy(['username' => 'newuser3']);
         $this->assertNotNull($createdUser);
-        $this->assertSame('newuser', $createdUser->getUsername());
-        $this->assertSame('newuser@example.com', $createdUser->getEmail());
+        $this->assertSame('newuser3', $createdUser->getUsername());
+        $this->assertSame('newuser3@example.com', $createdUser->getEmail());
         $this->assertTrue(in_array('ROLE_USER', $createdUser->getRoles()));
     }
     
