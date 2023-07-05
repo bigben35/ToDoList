@@ -16,10 +16,6 @@ class TaskControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
 
-    // public function setUp(): void
-    // {
-    //     $this->client = static::createClient();
-    // }
     private TaskRepository $taskRepository;
     private EntityManagerInterface $entityManager;
 
@@ -58,7 +54,7 @@ class TaskControllerTest extends WebTestCase
 
         // Remplir le formulaire de connexion avec les informations d'identification valides
         $form = $crawler->selectButton('Se connecter')->form();
-        $form['_username'] = 'user1';
+        $form['_username'] = 'user5';
         $form['_password'] = 'password';
         $this->client->submit($form);
 
@@ -81,7 +77,7 @@ class TaskControllerTest extends WebTestCase
         $userRepository = $this->entityManager->getRepository(User::class);
 
         // Récupérer un utilisateur existant à partir de la base de données
-        $user = $userRepository->findOneBy(['username' => 'admin']);
+        $user = $userRepository->findOneBy(['username' => 'user5']);
 
         // Créer une nouvelle tâche
         $task = new Task();
@@ -164,8 +160,10 @@ class TaskControllerTest extends WebTestCase
         
         $this->client->loginUser($user);
         $this->client->followRedirects();
+
         $idTask = $user->getTasks()->first()->getId();
         $crawler = $this->client->request('GET', "/tasks/$idTask/toggle");
+
         $this->assertResponseIsSuccessful();
         $this->assertRouteSame('task_list');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);

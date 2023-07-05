@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserControllerTest extends WebTestCase
 {
@@ -52,4 +53,74 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Créer un utilisateur');
     }
+
+
+    public function testCreateUserByAdmin(): void
+    {
+        $this->client->followRedirects();
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $passwordHasher = static::getContainer()->get(UserPasswordHasherInterface::class);
+    
+        $testUserAdmin = $userRepository->findOneBy(['username' => 'admin']);
+    
+        $this->client->loginUser($testUserAdmin);
+        $crawler = $this->client->request('GET', '/users/create');
+        $this->assertResponseIsSuccessful();
+    
+        $form = $crawler->selectButton('Ajouter')->form();
+        $form['user[username]'] = 'newuser3';
+        $form['user[email]'] = 'newuser3@example.com';
+        $form['user[password][first]'] = 'password';
+        $form['user[password][second]'] = 'password';
+        $form['user[roles]']->select('ROLE_USER');
+    
+        $this->client->submit($form);
+        // $response = $this->client->getResponse();
+        // $this->assertTrue($response->isRedirect('/users'));
+        $this->assertResponseIsSuccessful();
+        // $this->client->followRedirect();
+        $this->assertSelectorTextContains('div.alert.alert-success', 'L\'utilisateur a bien été ajouté.');
+    
+        // Vérification des données de l'utilisateur créé
+        $createdUser = $userRepository->findOneBy(['username' => 'newuser3']);
+        $this->assertNotNull($createdUser);
+        $this->assertSame('newuser3', $createdUser->getUsername());
+        $this->assertSame('newuser3@example.com', $createdUser->getEmail());
+        $this->assertTrue(in_array('ROLE_USER', $createdUser->getRoles()));
+    }
+    
+
+
+    public function testEditUserByAdmin(): void
+{
+    $this->client->followRedirects();
+    $userRepository = static::getContainer()->get(UserRepository::class);
+    $passwordHasher = static::getContainer()->get(UserPasswordHasherInterface::class);
+
+    $testUserAdmin = $userRepository->findOneBy(['username' => 'admin']);
+    $testUser = $userRepository->findOneBy(['username' => 'updateduser1']);
+
+    $this->client->loginUser($testUserAdmin);
+    $crawler = $this->client->request('GET', '/users/'.$testUser->getId().'/edit');
+    $this->assertResponseIsSuccessful();
+
+    $form = $crawler->selectButton('Modifier')->form();
+    $form['user[username]'] = 'updateduser';
+    $form['user[email]'] = 'updateduser@example.com';
+    $form['user[password][first]'] = 'password';
+    $form['user[password][second]'] = 'password';
+    $form['user[roles]']->select('ROLE_USER');
+
+    $this->client->submit($form);
+    $this->assertResponseIsSuccessful();
+    $this->assertSelectorTextContains('div.alert.alert-success', 'L\'utilisateur a bien été modifié.');
+
+    // Vérification des données de l'utilisateur modifié
+    $updatedUser = $userRepository->findOneBy(['username' => 'updateduser']);
+    $this->assertNotNull($updatedUser);
+    $this->assertSame('updateduser', $updatedUser->getUsername());
+    $this->assertSame('updateduser@example.com', $updatedUser->getEmail());
+    $this->assertTrue(in_array('ROLE_USER', $updatedUser->getRoles()));
+}
+
 }
