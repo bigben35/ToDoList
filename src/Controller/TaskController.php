@@ -63,12 +63,10 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/edit', name: 'task_edit')]
-    // #[IsGranted(TaskVoter::OWN_TASK, subject: 'task')]
-    #[IsGranted(TaskVoter::OWN_TASK, subject: 'task')]
-    // #[IsGranted(TaskVoter::ANONYMOUS_TASK, subject: 'task')]
+    
     public function editAction(Task $task, Request $request, TaskRepository $taskRepository)
     {
-        $this->denyAccessUnlessGranted(TaskVoter::OWN_TASK, $task);
+        $this->denyAccessUnlessGranted(TaskVoter::TASK_EDIT, $task, "Vous n'avez pas l'autorisation de modifier cette tâche !");
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
