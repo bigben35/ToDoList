@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use App\Security\Voter\TaskVoter;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,9 +63,10 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/edit', name: 'task_edit')]
-    #[IsGranted('ROLE_USER', message: 'Vous devez être connecté avec un compte utilisateur')]
+    
     public function editAction(Task $task, Request $request, TaskRepository $taskRepository)
     {
+        $this->denyAccessUnlessGranted(TaskVoter::TASK_EDIT, $task, "Vous n'avez pas l'autorisation de modifier cette tâche !");
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
