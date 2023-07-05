@@ -5,8 +5,8 @@ La ToDoList est une application qui vous permet de gérer vos tâches quotidienn
 
 
 ## Prérequis
--PHP 8.0 ou supérieur
--Symfony 6.0 ou supérieur
+-PHP 8.0 ou supérieur  
+-Symfony 6.0 ou supérieur  
 -Composer
 
 ## Installation
