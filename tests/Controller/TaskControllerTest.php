@@ -77,7 +77,7 @@ class TaskControllerTest extends WebTestCase
         $userRepository = $this->entityManager->getRepository(User::class);
 
         // Récupérer un utilisateur existant à partir de la base de données
-        $user = $userRepository->findOneBy(['username' => 'admin']);
+        $user = $userRepository->findOneBy(['username' => 'user5']);
 
         // Créer une nouvelle tâche
         $task = new Task();
@@ -122,7 +122,7 @@ class TaskControllerTest extends WebTestCase
         $this->client->loginUser($testUser);
 
         // envoie une requête GET pour accéder à la page d'édition de la tâche spécifique, en utilisant l'identifiant de la tâche
-        $crawler = $this->client->request('GET', '/tasks/110/edit');
+        $crawler = $this->client->request('GET', '/tasks/180/edit');
 
         // vérifie que la réponse de la requête est réussie
         $this->assertResponseIsSuccessful();
@@ -140,7 +140,7 @@ class TaskControllerTest extends WebTestCase
         // vérifie que dans la réponse HTML, il y a un élément <div> contenant le texte "La tâche a bien été modifiée.
         $this->assertSelectorExists('div', 'La tâche a bien été modifiée.');
 
-        $ModifiedTask = $taskRepository->findOneBy(['id' => '110']);
+        $ModifiedTask = $taskRepository->findOneBy(['id' => '180']);
 
         // vérifie que le titre de la tâche modifiée contient la chaîne... 
         $this->assertStringContainsString('Tâche user5 edit', $ModifiedTask->getTitle());
@@ -158,7 +158,7 @@ class TaskControllerTest extends WebTestCase
         
         $this->client->loginUser($user);
         $this->client->followRedirects();
-        $crawler = $this->client->request('GET', '/tasks/110/toggle');
+        $crawler = $this->client->request('GET', '/tasks/180/toggle');
         $this->assertResponseIsSuccessful();
         $this->assertRouteSame('task_list');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
