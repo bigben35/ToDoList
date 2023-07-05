@@ -1,0 +1,2 @@
+# ToDoList
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3be4070cba7a4791a2e26070b859be32)](https://app.codacy.com/gh/bigben35/ToDoList?utm_source=github.com&utm_medium=referral&utm_content=bigben35/ToDoList&utm_campaign=Badge_Grade)
