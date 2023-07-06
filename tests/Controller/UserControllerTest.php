@@ -68,8 +68,8 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     
         $form = $crawler->selectButton('Ajouter')->form();
-        $form['user[username]'] = 'newuser3';
-        $form['user[email]'] = 'newuser3@example.com';
+        $form['user[username]'] = 'newuser4';
+        $form['user[email]'] = 'newuser4@example.com';
         $form['user[password][first]'] = 'password';
         $form['user[password][second]'] = 'password';
         $form['user[roles]']->select('ROLE_USER');
@@ -82,10 +82,10 @@ class UserControllerTest extends WebTestCase
         $this->assertSelectorTextContains('div.alert.alert-success', 'L\'utilisateur a bien été ajouté.');
     
         // Vérification des données de l'utilisateur créé
-        $createdUser = $userRepository->findOneBy(['username' => 'newuser3']);
+        $createdUser = $userRepository->findOneBy(['username' => 'newuser4']);
         $this->assertNotNull($createdUser);
-        $this->assertSame('newuser3', $createdUser->getUsername());
-        $this->assertSame('newuser3@example.com', $createdUser->getEmail());
+        $this->assertSame('newuser4', $createdUser->getUsername());
+        $this->assertSame('newuser4@example.com', $createdUser->getEmail());
         $this->assertTrue(in_array('ROLE_USER', $createdUser->getRoles()));
     }
     
@@ -98,15 +98,15 @@ class UserControllerTest extends WebTestCase
     $passwordHasher = static::getContainer()->get(UserPasswordHasherInterface::class);
 
     $testUserAdmin = $userRepository->findOneBy(['username' => 'admin']);
-    $testUser = $userRepository->findOneBy(['username' => 'updateduser1']);
+    $testUser = $userRepository->findOneBy(['username' => 'updateduser']);
 
     $this->client->loginUser($testUserAdmin);
     $crawler = $this->client->request('GET', '/users/'.$testUser->getId().'/edit');
     $this->assertResponseIsSuccessful();
 
     $form = $crawler->selectButton('Modifier')->form();
-    $form['user[username]'] = 'updateduser';
-    $form['user[email]'] = 'updateduser@example.com';
+    $form['user[username]'] = 'updateduser1';
+    $form['user[email]'] = 'updateduser1@example.com';
     $form['user[password][first]'] = 'password';
     $form['user[password][second]'] = 'password';
     $form['user[roles]']->select('ROLE_USER');
@@ -116,10 +116,10 @@ class UserControllerTest extends WebTestCase
     $this->assertSelectorTextContains('div.alert.alert-success', 'L\'utilisateur a bien été modifié.');
 
     // Vérification des données de l'utilisateur modifié
-    $updatedUser = $userRepository->findOneBy(['username' => 'updateduser']);
+    $updatedUser = $userRepository->findOneBy(['username' => 'updateduser1']);
     $this->assertNotNull($updatedUser);
-    $this->assertSame('updateduser', $updatedUser->getUsername());
-    $this->assertSame('updateduser@example.com', $updatedUser->getEmail());
+    $this->assertSame('updateduser1', $updatedUser->getUsername());
+    $this->assertSame('updateduser1@example.com', $updatedUser->getEmail());
     $this->assertTrue(in_array('ROLE_USER', $updatedUser->getRoles()));
 }
 
