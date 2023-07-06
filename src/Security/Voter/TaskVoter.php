@@ -12,10 +12,11 @@ class TaskVoter extends Voter
     public const OWN_TASK = 'OWN_TASK';
     public const ANONYMOUS_TASK = 'ANONYMOUS_TASK';
     public const TASK_EDIT = 'TASK_EDIT';
+    public const TASK_DELETE = 'TASK_DELETE';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        if (!in_array($attribute, [self::OWN_TASK, self::ANONYMOUS_TASK, self::TASK_EDIT])) {
+        if (!in_array($attribute, [self::OWN_TASK, self::ANONYMOUS_TASK, self::TASK_EDIT, self::TASK_DELETE])) {
             return false;
         }
         if (!$subject instanceof Task) {
@@ -38,6 +39,7 @@ class TaskVoter extends Voter
             self::OWN_TASK => $this->canEditOwnTask($subject, $user),
             self::ANONYMOUS_TASK => $this->canEditAnonymousTask($subject, $user),
             self::TASK_EDIT => $this->canEditAnonymousTask($subject, $user) || $this->canEditOwnTask($subject, $user),
+            self::TASK_DELETE => $this->canDeleteAnonymousTask($subject, $user) || $this->canDeleteOwnTask($subject, $user),
             default => false,
         };
     }
@@ -48,6 +50,21 @@ class TaskVoter extends Voter
     }
 
     private function canEditAnonymousTask(Task $task, User $user): bool
+    {
+        // Check if the user is an admin and the task is anonymous
+        if (in_array('ROLE_ADMIN', $user->getRoles()) && null === $task->getUser()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function canDeleteOwnTask(Task $task, User $user): bool
+    {
+        return $task->getUser() === $user;
+    }
+
+    private function canDeleteAnonymousTask(Task $task, User $user): bool
     {
         // Check if the user is an admin and the task is anonymous
         if (in_array('ROLE_ADMIN', $user->getRoles()) && null === $task->getUser()) {
