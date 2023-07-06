@@ -63,7 +63,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/edit', name: 'task_edit')]
-    
+    #[IsGranted('ROLE_USER', message: 'Vous devez être connecté avec un compte utilisateur')]
     public function editAction(Task $task, Request $request, TaskRepository $taskRepository)
     {
         $this->denyAccessUnlessGranted(TaskVoter::TASK_EDIT, $task, "Vous n'avez pas l'autorisation de modifier cette tâche !");
@@ -135,6 +135,7 @@ class TaskController extends AbstractController
     #[IsGranted('ROLE_USER', message: 'Vous devez être connecté avec un compte utilisateur')]
     public function deleteTaskAction(Task $task, TaskRepository $taskRepository): Response
     {
+        $this->denyAccessUnlessGranted(TaskVoter::TASK_DELETE, $task, "Vous n'avez pas l'autorisation de supprimer cette tâche !");
         $taskRepository->remove($task, true);
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');

@@ -240,4 +240,38 @@ class TaskControllerTest extends WebTestCase
         // réponse HTML, il y a un élément <div> avec la classe alert-success contenant le texte "La tâche a bien été supprimée.". Cela permet de vérifier visuellement que la suppression de la tâche a été confirmée.
         $this->assertSelectorTextContains('html div.alert-success', "La tâche a bien été supprimée.");
     }
+
+    public function testUserRoleCannotDeleteAdminTask(): void
+{
+    // Cette ligne indique au client de suivre les redirections automatiquement, ce qui est utile lorsque vous effectuez une action qui déclenche une redirection comme la suppression.
+    $this->client->followRedirects();
+
+    // récupère le UserRepository à partir du conteneur de dépendances de Symfony.
+    $userRepository = static::getContainer()->get(UserRepository::class);
+
+    // récupère l'user avec le rôle ROLE_USER
+    $testUser = $userRepository->findOneBy(['username' => 'user5']);
+
+    // récupère l'admin
+    $testUserAdmin = $userRepository->findOneBy(['username' => 'admin']);
+
+    // récupère la première tâche créée par un utilisateur avec le rôle ROLE_ADMIN
+    $task = $testUserAdmin->getTasks()->first();
+
+    // simulate $testUser being logged in
+    $this->client->loginUser($testUser);
+
+    // envoie une requête GET pour accéder à la page de suppression de la tâche spécifique, en utilisant l'identifiant de la tâche.
+    $this->client->request('GET', '/tasks/'.$task->getId().'/delete');
+
+    // vérifie que la réponse est une redirection vers une page d'erreur ou une page de refus d'accès
+    // $this->assertResponseRedirects('/access-denied');
+
+    // Vérifie que la réponse a un code de statut HTTP 403 (accès refusé)
+    $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+
+    // vérifie que le message "Vous n'avez pas l'autorisation de supprimer cette tâche !" est affiché dans le flash bag
+    $this->assertStringContainsString('Vous n\'avez pas l\'autorisation de supprimer cette tâche !', $this->client->getResponse()->getContent());
+
+}
  }
