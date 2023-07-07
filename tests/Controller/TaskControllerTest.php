@@ -71,37 +71,41 @@ class TaskControllerTest extends WebTestCase
 
      
 
-    public function testCreateTaskLinkedToUser(): void
-    {
-        // Récupérer le référentiel de l'utilisateur
-        $userRepository = $this->entityManager->getRepository(User::class);
+     public function testCreateTaskLinkedToUser(): void
+     {
+         // Simuler la connexion de l'utilisateur
+         $userRepository = $this->entityManager->getRepository(User::class);
+         $user = $userRepository->findOneBy(['username' => 'user5']);
+         $this->client->loginUser($user);
+     
+         // Accéder à la page du formulaire de création de tâche
+         $crawler = $this->client->request('GET', '/tasks/create');
+     
+         // Remplir les champs du formulaire avec les valeurs appropriées
+         $form = $crawler->selectButton('Ajouter')->form();
+         $form['task[title]'] = 'Nouvelle tâche pour le test 2';
+         $form['task[content]'] = 'Description de la tâche pour le test 2';
+     
+         // Soumettre le formulaire pour créer la tâche
+         $this->client->submit($form);
+     
+         // Vérifier que la réponse est une redirection vers la page "/tasks"
+        $this->assertResponseRedirects('/tasks');
 
-        // Récupérer un utilisateur existant à partir de la base de données
-        $user = $userRepository->findOneBy(['username' => 'user5']);
+        // Suivre la redirection en accédant à la nouvelle page
+        $crawler = $this->client->followRedirect();
 
-        // Créer une nouvelle tâche
-        $task = new Task();
-        $task->setTitle('Nouvelle tâche');
-        $task->setContent('Description de la tâche');
-
-        // Associer la tâche à l'utilisateur
-        $task->setUser($user);
-
-        // Enregistrer la tâche en utilisant le TaskRepository
-        $this->taskRepository->save($task, true);
-
-        // Récupérer la tâche enregistrée depuis la base de données
-        $persistedTask = $this->taskRepository->find($task->getId());
-        // dd($persistedTask);
-
-        // Vérifier si la tâche récupérée correspond à la tâche que vous avez créée
-        $this->assertEquals($task->getTitle(), $persistedTask->getTitle());
-        $this->assertEquals($task->getContent(), $persistedTask->getContent());
-
-        // Vérifier si la tâche a été enregistrée avec succès
-        $this->assertNotNull($task->getId());
-    }
-
+        // Vérifier que vous êtes sur la liste des tâches
+        $this->assertRouteSame('task_list');
+        
+        // Vérifier que la tâche a été créée avec succès
+        $task = $this->taskRepository->findOneBy(['title' => 'Nouvelle tâche pour le test 2']);
+        $this->assertNotNull($task);
+        $this->assertEquals('Nouvelle tâche pour le test 2', $task->getTitle());
+        $this->assertEquals('Description de la tâche pour le test 2', $task->getContent());
+        // Vérifier que l'ID de l'utilisateur de la tâche correspond à l'ID de l'utilisateur connecté
+        $this->assertSame($user->getId(), $task->getUser()->getId());
+     }
 
 
     public function testEditTaskByAnUser(): void
