@@ -14,7 +14,9 @@ Clonez le projet depuis le référentiel GitHub : git clone **https://github.com
 Naviguer dans le dossier du projet : **cd mon-projet-symfony**  
 Installer les dépendances avec Composer : **composer install**  
 
-Faire un **composer require symfony/console** pour pouvoir utiliser la commande symfony console au lieu de php/bin console (au choix de la personne).  Créer une base de données dans PhpMyAdmin (par exemple) avec le nom souhaité. Il sera utilisé dans le fichier .env pour permettre la connexion entre l'application et la base de données. Dupliquer le fichier .env et nommez-le .env.local. Pour une question de sécurité, c'est ici que vous allez mettre vos informations de connexions.    
+Faire un **composer require symfony/console** pour pouvoir utiliser la commande symfony console au lieu de php/bin console (au choix de la personne).  
+Créer une base de données dans PhpMyAdmin (par exemple) avec le nom souhaité. Il sera utilisé dans le fichier .env pour permettre la connexion entre l'application et la base de données. Dupliquer le fichier .env et nommez-le .env.local. Pour une question de sécurité, c'est ici que vous allez mettre vos informations de connexions.  
+
 Dans le fichier .env.local, modifiez la variable DATABASE_URL pour correspondre à vos paramètres de base de données. Par exemple : **DATABASE_URL=mysql://username:password@localhost:3306/nom_base_de_donnees**  
 
 Créer la base de données : **symfony console doctrine:database:create**  
