@@ -12,24 +12,33 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Cache\CacheInterface;
+use Psr\Log\LoggerInterface;
 
 class TaskController extends AbstractController
 {
     #[Route('/tasks', name: 'task_list')]
     #[IsGranted('ROLE_USER', message: 'Vous devez être connecté avec un compte utilisateur')]
-    public function listAction(TaskRepository $taskRepository): Response
+    public function listAction(TaskRepository $taskRepository, CacheInterface $cache, LoggerInterface $logger): Response
     {
         $user = $this->getUser(); // Récupérer l'utilisateur connecté
         $isAdmin = in_array('ROLE_ADMIN', $user->getRoles()); // Vérifier si l'utilisateur a le rôle ROLE_ADMIN
     
         // Récupérer les tâches liées à l'utilisateur connecté
-        $tasks = $taskRepository->findBy(['user' => $user]);
+        // Utilisation du cache pour stocker les résultats de la requête
+    $tasks = $cache->get('task_list', function () use ($taskRepository, $user, $isAdmin, $logger) {
+        $logger->info('Récupération des tâches depuis le cache.'); // Message de journalisation avant la récupération des tâches depuis le cache
+        $userTasks = $taskRepository->findBy(['user' => $user]);
     
         // Si l'utilisateur est un administrateur, ajouter les tâches anonymes
         if ($isAdmin) {
             $anonymousTasks = $taskRepository->findBy(['user' => null]);
-            $tasks = array_merge($tasks, $anonymousTasks);
+            $userTasks = array_merge($userTasks, $anonymousTasks);
         }
+        $logger->info('Tâches récupérées depuis le cache avec succès.'); // Message de journalisation après la récupération des tâches depuis le cache
+
+        return $userTasks;
+    });
     
         return $this->render('task/list.html.twig', ['tasks' => $tasks]);
     }
