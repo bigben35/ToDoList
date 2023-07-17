@@ -22,10 +22,21 @@ Dans le fichier .env.local, modifiez la variable DATABASE_URL pour correspondre 
 Créer la base de données : **symfony console doctrine:database:create**  
 Effectuer les migrations : **symfony console make:migration** puis **symfony console doctrine:migrations:migrate**  
 Charger les fixtures (données de démonstration) : **symfony console doctrine:fixtures:load**, pour avoir des données (Users, Tasks).  
+  
+
+## Base de données de Test  
+Si il n'y a pas de .env.test, dupliquez le .env et nommez-le .env.test. Ensuite dupliquez le .env.test en .env.test.local. C'est dans ce .env.test.local que vous allez mettre vos données de connexion comme pour le .env.local ci-dessus.
+Créez la base de données de test: **symfony console doctrine:database:create --env=test**. Cela créera une nouvelle base de données de test en utilisant la configuration définie dans le fichier **.env.test**.  
+Générez le schéma de la base de données en exécutant les migrations: **symfony console doctrine:migrations:migrate --env=test**.  
+Lancez les fixtures: **symfony console doctrine:fixtures:load --env=test**
+Vérifier si Xdebug fonctionne.  
+Installez PHPUnit pour les tests: **composer require --dev phpunit/phpunit ^9**.  
+Lancez les tests avec **vendor/bin/phpunit**  
+Générez le rapport de couverture de code: **vendor/bin/phpunit --coverage-html public/test-coverage**.  
+
 Démarrer le serveur Symfony : **symfony server:start**  
 
-Et voilà ! Vous pouvez maintenant accéder à l'application en naviguant vers **http://localhost:8000** dans votre navigateur.  
-
+Et voilà ! Vous pouvez maintenant accéder à l'application en naviguant vers **http://localhost:8000** dans votre navigateur.
 
 ## Authentification 
 Pour l'admin: username: admin; password: password  
