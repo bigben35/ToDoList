@@ -26,8 +26,8 @@ class TaskController extends AbstractController
     
         // Récupérer les tâches liées à l'utilisateur connecté
         // Utilisation du cache pour stocker les résultats de la requête
-    $tasks = $cache->get('task_list', function () use ($taskRepository, $user, $isAdmin, $logger) {
-        $logger->info('Récupération des tâches depuis le cache.'); // Message de journalisation avant la récupération des tâches depuis le cache
+    // $tasks = $cache->get('task_list', function () use ($taskRepository, $user, $isAdmin, $logger) {
+        // $logger->info('Récupération des tâches depuis le cache.'); // Message de journalisation avant la récupération des tâches depuis le cache
         $userTasks = $taskRepository->findBy(['user' => $user]);
     
         // Si l'utilisateur est un administrateur, ajouter les tâches anonymes
@@ -35,12 +35,12 @@ class TaskController extends AbstractController
             $anonymousTasks = $taskRepository->findBy(['user' => null]);
             $userTasks = array_merge($userTasks, $anonymousTasks);
         }
-        $logger->info('Tâches récupérées depuis le cache avec succès.'); // Message de journalisation après la récupération des tâches depuis le cache
+        // $logger->info('Tâches récupérées depuis le cache avec succès.'); // Message de journalisation après la récupération des tâches depuis le cache
 
-        return $userTasks;
-    });
+    //     return $userTasks;
+    // });
     
-        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
+        return $this->render('task/list.html.twig', ['tasks' => $userTasks]);
     }
 
 
