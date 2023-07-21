@@ -23,13 +23,13 @@ Vous pouvez lancer un test avec **vendor/bin/phpunit** ou **vendor/bin/phpunit -
 
 # Code de conduite
 
-# Notre engagement
+## Notre engagement
 Dans l'intérêt de favoriser un environnement ouvert et accueillant, nous, en tant que contributeurs et mainteneurs, nous engageons à faire de la participation à notre projet et à notre communauté une expérience sans harcèlement pour tous, quels que soient l'âge, la taille, le handicap, l'origine ethnique, l'identité et l'expression de genre, le niveau d'expérience, la nationalité, l'apparence personnelle, la race, la religion ou l'identité et l'orientation sexuelles.
 
-# Nos normes
+## Nos normes
 Voici des exemples de comportements qui contribuent à créer un environnement positif :
 
-# Utiliser un langage accueillant et inclusif
+## Utiliser un langage accueillant et inclusif
 -Être respectueux des points de vue et des expériences différents
 -Accepter avec grâce les critiques constructives
 -Se concentrer sur ce qui est le mieux pour la communauté
@@ -43,10 +43,10 @@ Voici des exemples de comportements inacceptables de la part des participants :
 -Publier des informations privées d'autrui, telles qu'une adresse physique ou électronique, sans autorisation explicite
 -Autre conduite qui pourrait raisonnablement être considérée comme inappropriée dans un cadre professionnel
 
-# Nos responsabilités
+## Nos responsabilités
 Les mainteneurs du projet sont chargés de clarifier les normes de comportement acceptable et sont tenus de prendre des mesures correctives appropriées et justes en réponse à tout cas de comportement inacceptable.
 
 Les mainteneurs du projet ont le droit et la responsabilité de supprimer, modifier ou rejeter les commentaires, les commits, le code, les modifications du wiki, les problèmes et autres contributions qui ne sont pas alignés sur ce code de conduite, ou d'interdire temporairement ou définitivement tout contributeur pour d'autres comportements qu'ils jugent inappropriés, menaçants, offensants ou nuisibles.
 
-# Portée
+## Portée
 Ce code de conduite s'applique à la fois dans les espaces du projet et dans les espaces publics lorsqu'un individu représente le projet ou sa communauté. Les exemples de représentation d'un projet ou d'une communauté incluent l'utilisation d'une adresse e-mail officielle de projet, la publication via un compte de réseau social officiel ou le fait d'agir en tant que représentant désigné lors d'un événement en ligne ou hors ligne. La représentation d'un projet peut être davantage définie et clarifiée par les mainteneurs du projet.
