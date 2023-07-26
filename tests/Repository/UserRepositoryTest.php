@@ -21,7 +21,7 @@ class UserRepositoryTest extends KernelTestCase
     }
     public function testRemoveUser(): void
 {
-    $user = $this->userRepository->findOneBy(['username' => 'newuser2']);
+    $user = $this->userRepository->findOneBy(['username' => 'newuser9']);
     $this->assertInstanceOf(User::class, $user);
 
     // Supprimer les tâches associées à l'utilisateur
@@ -33,7 +33,7 @@ class UserRepositoryTest extends KernelTestCase
     $this->entityManager->flush();
     $this->entityManager->clear();
 
-    $this->assertNull($this->userRepository->findOneBy(['username' => 'newuser2']));
+    $this->assertNull($this->userRepository->findOneBy(['username' => 'newuser9']));
 }
 
 
@@ -41,8 +41,8 @@ class UserRepositoryTest extends KernelTestCase
     {
         // Créer un nouvel utilisateur
         $user = new User();
-        $user->setUsername('testuser25');
-        $user->setEmail('testuser25@example.com');
+        $user->setUsername('testuser32');
+        $user->setEmail('testuser32@example.com');
         $user->setPassword('testpassword');
 
         // Créer une nouvelle tâche
@@ -103,8 +103,8 @@ public function testUpgradePassword(): void
 {
     // Créer un nouvel utilisateur
     $user = new User();
-    $user->setUsername('testuser26');
-    $user->setEmail('testuser26@example.com');
+    $user->setUsername('testuser33');
+    $user->setEmail('testuser33@example.com');
     
     // Hacher le nouveau mot de passe
     $newPassword = 'newpassword';
