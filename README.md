@@ -1,49 +1,49 @@
 # ToDoList
-La ToDoList est une application qui vous permet de gérer vos tâches quotidiennes de manière simple et efficace.
+The ToDoList is an application that allows you to manage your daily tasks in a simple and efficient manner.
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/3f25d8c0122047bcbb82f8fc7a0546cd)](https://app.codacy.com/gh/bigben35/ToDoList/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 
-## Prérequis
--PHP 8.0 ou supérieur  
--Symfony 6.0 ou supérieur  
--Composer
+## Prerequisites
+PHP 8.0 or higher
+Symfony 6.0 or higher
+Composer
 
 ## Installation
-Clonez le projet depuis le référentiel GitHub : git clone **https://github.com/bigben35/ToDoList.git**  
-Naviguer dans le dossier du projet : **cd mon-projet-symfony**  
-Installer les dépendances avec Composer : **composer install**  
+Clone the project from the GitHub repository: git clone **https://github.com/bigben35/ToDoList.git**
+Navigate to the project directory: **cd mon-projet-symfony**
+Install dependencies using Composer: **composer install** 
 
-Faire un **composer require symfony/console** pour pouvoir utiliser la commande symfony console au lieu de php/bin console (au choix de la personne).  
-Créer une base de données dans PhpMyAdmin (par exemple) avec le nom souhaité. Il sera utilisé dans le fichier .env pour permettre la connexion entre l'application et la base de données. Dupliquer le fichier .env et nommez-le .env.local. Pour une question de sécurité, c'est ici que vous allez mettre vos informations de connexions.  
+Run **composer require symfony/console** to enable the use of the symfony console command instead of php/bin console (personal preference).  
+Create a database in PhpMyAdmin (for example) with the desired name. This name will be used in the .env file to establish a connection between the application and the database. Duplicate the .env file and name it .env.local. For security reasons, this is where you will input your connection information.  
 
-Dans le fichier .env.local, modifiez la variable DATABASE_URL pour correspondre à vos paramètres de base de données. Par exemple : **DATABASE_URL=mysql://username:password@localhost:3306/nom_base_de_donnees**  
+In the .env.local file, modify the DATABASE_URL variable to match your database parameters. For example: **DATABASE_URL=mysql://username:password@localhost:3306/database_name**  
 
-Créer la base de données : **symfony console doctrine:database:create**  
-Effectuer les migrations : **symfony console make:migration** puis **symfony console doctrine:migrations:migrate**  
-Charger les fixtures (données de démonstration) : **symfony console doctrine:fixtures:load**, pour avoir des données (Users, Tasks).  
+Create the database: **symfony console doctrine:database:create**
+Perform migrations: **symfony console make:migration and then symfony console doctrine:migrations:migrate**
+Load fixtures (demo data): **symfony console doctrine:fixtures:load** to populate the database with data (Users, Tasks).  
   
 
-## Base de données de Test  
-Si il n'y a pas de .env.test, dupliquez le .env et nommez-le .env.test. Ensuite dupliquez le .env.test en .env.test.local. C'est dans ce .env.test.local que vous allez mettre vos données de connexion comme pour le .env.local ci-dessus.  
-Créez la base de données de test: **symfony console doctrine:database:create --env=test**. 
+## Test Database
+If there is no .env.test, duplicate the .env and name it .env.test. Then duplicate .env.test to .env.test.local. In this .env.test.local file, input your connection data just like in .env.local above.  
+Create the test database: **symfony console doctrine:database:create --env=test**
 
-Cela créera une nouvelle base de données de test en utilisant la configuration définie dans le fichier **.env.test**.  
-Générez le schéma de la base de données en exécutant les migrations: **symfony console doctrine:migrations:migrate --env=test**.  
+This will create a new test database using the configuration defined in the file **.env.test**.  
+Generate the database schema by running migrations: **symfony console doctrine:migrations:migrate --env=test**.  
 
-Lancez les fixtures: **symfony console doctrine:fixtures:load --env=test**
+Run fixtures: **symfony console doctrine:fixtures:load --env=test**
 
-Vérifier si Xdebug fonctionne.  
+Ensure that Xdebug is functioning properly.  
 
-Installez PHPUnit pour les tests: **composer require --dev phpunit/phpunit ^9**.  
-Lancez les tests avec **vendor/bin/phpunit**  
-Générez le rapport de couverture de code: **vendor/bin/phpunit --coverage-html public/test-coverage**.  
+Install PHPUnit for testing: **composer require --dev phpunit/phpunit ^9**.  
+Run tests with: **vendor/bin/phpunit**  
+Generate a code coverage report: **vendor/bin/phpunit --coverage-html public/test-coverage**.  
 
-Démarrer le serveur Symfony : **symfony server:start**  
+Start the Symfony server: **symfony server:start**  
 
-Et voilà ! Vous pouvez maintenant accéder à l'application en naviguant vers **http://localhost:8000** dans votre navigateur.
+And that's it! You can now access the application by navigating to **http://localhost:8000** in your web browser.
 
-## Authentification 
-Pour l'admin: username: admin; password: password  
-Pour un user: username: user1; password: password
+## Authentication
+For admin: username: admin; password: password
+For an user: username: user1; password: password
 
