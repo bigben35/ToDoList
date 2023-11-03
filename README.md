@@ -10,9 +10,9 @@ Symfony 6.0 or higher
 Composer
 
 ## Installation
-Clone the project from the GitHub repository: git clone **https://github.com/bigben35/ToDoList.git**
-Navigate to the project directory: **cd mon-projet-symfony**
-Install dependencies using Composer: **composer install** 
+Clone the project from the GitHub repository: git clone **https://github.com/bigben35/ToDoList.git**  
+Navigate to the project directory: **cd mon-projet-symfony**  
+Install dependencies using Composer: **composer install**   
 
 Run **composer require symfony/console** to enable the use of the symfony console command instead of php/bin console (personal preference).  
 Create a database in PhpMyAdmin (for example) with the desired name. This name will be used in the .env file to establish a connection between the application and the database. Duplicate the .env file and name it .env.local. For security reasons, this is where you will input your connection information.  
