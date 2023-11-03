@@ -44,6 +44,6 @@ Start the Symfony server: **symfony server:start**
 And that's it! You can now access the application by navigating to **http://localhost:8000** in your web browser.
 
 ## Authentication
-For admin: username: admin; password: password
+For admin: username: admin; password: password  
 For an user: username: user1; password: password
 
